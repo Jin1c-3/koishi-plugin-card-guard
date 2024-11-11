@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-card-guard",
   "description": "用来监视群友的群名片是否满足正则，否则发出提示",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

@@ -39,6 +39,8 @@ export function apply(
   const logger = ctx.logger("card-guard");
   ctx = ctx.guild();
   ctx.on("message", async (session) => {
+    // never respond to messages from self
+    if (ctx.bots[session.uid]) return;
     let regex: RegExp;
     try {
       regex = new RegExp(regex_str);
