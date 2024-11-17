@@ -7,7 +7,6 @@ export interface Config {
   chance: number;
   no_title: boolean;
   regex_str: string;
-  prompt: string;
 }
 
 export const Config: Schema<Config> = Schema.object({
@@ -24,20 +23,12 @@ export const Config: Schema<Config> = Schema.object({
   regex_str: Schema.string()
     .required()
     .description("群名片的正则表达式，错误的表达式会导致插件不断报错"),
-  prompt: Schema.string()
-    .role("textarea")
-    .default(
-      "不合规范，请更改为：\n【本科入学年份-本科学校-保研学校（可以不填）-昵称】"
-    )
-    .description("不合规范时的提示"),
 });
 
-export function apply(
-  ctx: Context,
-  { chance, no_title, regex_str, prompt }: Config
-) {
+export function apply(ctx: Context, { chance, no_title, regex_str }: Config) {
+  ctx.i18n.define("zh-CN", require("./locales/zh_CN"));
   const logger = ctx.logger("card-guard");
-  ctx = ctx.guild();
+  ctx = ctx.platform("onebot").guild();
   ctx.on("message", async (session) => {
     // never respond to messages from self
     if (ctx.bots[session.uid]) return;
@@ -59,9 +50,12 @@ export function apply(
     const role = member_info.role;
     if ((title && no_title) || role !== "member") return;
     if (regex.test(card)) return;
-    return session.send([
-      h("at", { id: session.userId }),
-      ` 的群名片为【${card}】\n${prompt}`,
-    ]);
+    return session.send(
+      session.text("commands.card-guard.messages.alert", [
+        session.userId,
+        card,
+        regex_str,
+      ])
+    );
   });
 }
