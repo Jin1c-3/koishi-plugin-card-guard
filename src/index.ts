@@ -3,11 +3,6 @@ import {} from "koishi-plugin-adapter-onebot";
 
 export const name = "card-guard";
 
-export const reusable = true;
-
-export const usage =
-  "插件可以在多个群使用不同配置，当使用不同配置时，请**自行确保**过滤器的正确配置。即不能出现一个群使用多套配置的情况，否则会发生不可预料的错误。";
-
 export interface Config {
   chance: number;
   no_title: boolean;
