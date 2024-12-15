@@ -90,7 +90,7 @@ export function apply(
     const alert_message = await session.send(
       session.text("commands.card-guard.messages.alert", [
         session.userId,
-        card,
+        !card || card.trim() === "" ? "未设置" : card,
         regex_str,
       ])
     );
